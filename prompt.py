@@ -4,23 +4,30 @@ from langchain.chat_models import ChatOpenAI
 from langchain.chains import RetrievalQA
 from dotenv import load_dotenv
 
-load_dotenv()
-chat = ChatOpenAI()
+def initization():
+    load_dotenv()
+    chat = ChatOpenAI()
+    embeddings = OpenAIEmbeddings()
+    db = Chroma(
+        persist_directory="emb",
+        embedding_function=embeddings
+    )
+    retriever = db.as_retriever()
+    return chat, retriever
 
-embeddings = OpenAIEmbeddings()
-db = Chroma(
-    persist_directory="emb",
-    embedding_function=embeddings
-)
+def prompt_execution(chat, retriever):
+    chain = RetrievalQA.from_chain_type(
+        llm=chat,
+        retriever=retriever,
+        chain_type="stuff"
+    )
+    return chain
 
-retriever = db.as_retriever()
 
-chain = RetrievalQA.from_chain_type(
-    llm=chat,
-    retriever=retriever,
-    chain_type="stuff"
-)
+if __name__ == "__main__":
 
-result = chain.run("What is an interseting fact about English Language")
-
-print(result)
+    chat, retriever = initization()
+    chain = prompt_execution(chat, retriever)
+    prompt = input("Enter a prompt: ")
+    result = chain.run(prompt)
+    print(result)
