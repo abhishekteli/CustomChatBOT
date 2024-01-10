@@ -32,6 +32,7 @@ if __name__ == "__main__":
 
     chat, retriever = initization()
     chain = prompt_execution(chat, retriever)
-    prompt = input("Enter a prompt: ")
-    result = chain.run(prompt)
-    print(result)
+    while True:
+        prompt = input("Enter a prompt: ")
+        result = chain.run(prompt)
+        print(result)
