@@ -3,6 +3,7 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import RetrievalQA
 from dotenv import load_dotenv
+from redundant_filter_retriever import RedundantFilterRetriever
 
 def initization():
     load_dotenv()
@@ -12,7 +13,10 @@ def initization():
         persist_directory="emb",
         embedding_function=embeddings
     )
-    retriever = db.as_retriever()
+    retriever = RedundantFilterRetriever(
+        embeddings=embeddings,
+        chroma=db
+    )
     return chat, retriever
 
 def prompt_execution(chat, retriever):
