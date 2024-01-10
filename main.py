@@ -1,4 +1,4 @@
-from langchain. document_loaders import TextLoader, PyPDFLoader
+import langchain. document_loaders as ld
 from langchain.text_splitter import CharacterTextSplitter, RecursiveCharacterTextSplitter
 from langchain.vectorstores.chroma import Chroma
 from langchain.embeddings import OpenAIEmbeddings
@@ -9,18 +9,31 @@ def initization():
     embeddings = OpenAIEmbeddings()
     text_splitter = RecursiveCharacterTextSplitter(
         separators=["\n\n","\n",". "," ",""],
-        chunk_size =500,
+        chunk_size =256,
         chunk_overlap=0
         )
 
     return text_splitter, embeddings
 
-def file_load(file_type,file_location, text_splitter, embeddings):
+def file_load(file, text_splitter, embeddings):
 
-    if file_type == "PDF":
-        loader = PyPDFLoader(file_path=file_location)
+    name, extension = os.path.splitext(file)
+    if extension == '.pdf':
+        loader = ld.PyPDFLoader(file)
+    elif extension == '.docx':
+        loader = ld.Docx2txtLoader(file)
+    elif extension == '.csv':
+        loader = ld.CSVLoader(file)
+    elif extension == '.json':
+        loader = ld.JSONLoader(file)
+    elif extension == '.html':
+        loader = ld.UnstructuredHTMLLoader(file)
+    elif extension == '.txt' or extension == '.rtf':
+        loader = ld.TextLoader(file)
     else:
-        loader = TextLoader(file_path=file_location)
+        print(f'{file} type not supported')
+        return None
+    
 
     docs = loader.load_and_split(
         text_splitter=text_splitter
@@ -34,6 +47,11 @@ def file_load(file_type,file_location, text_splitter, embeddings):
 
 if __name__=="__main__":
     text_splitter, embeddings = initization()
-    file_type = input("Enter the File type: ")
-    file_location = input("Enter the File location: ")
-    file_load(file_type, file_location, text_splitter, embeddings)
+    while True:
+        answer = input("Do you want to upload document(Y/N) : ")
+        if answer == 'Y' or answer == 'y':
+            file_type = input("Enter the File type: ")
+            file_location = input("Enter the File location: ")
+            file_load(file_type, file_location, text_splitter, embeddings)
+        else:
+            break
