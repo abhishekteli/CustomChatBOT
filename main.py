@@ -1,5 +1,5 @@
 from langchain. document_loaders import TextLoader, PyPDFLoader
-from langchain.text_splitter import CharacterTextSplitter
+from langchain.text_splitter import CharacterTextSplitter, RecursiveCharacterTextSplitter
 from langchain.vectorstores.chroma import Chroma
 from langchain.embeddings import OpenAIEmbeddings
 from dotenv import load_dotenv
@@ -7,9 +7,9 @@ from dotenv import load_dotenv
 def initization():
     load_dotenv()
     embeddings = OpenAIEmbeddings()
-    text_splitter = CharacterTextSplitter(
-        separator="\n",
-        chunk_size =200,
+    text_splitter = RecursiveCharacterTextSplitter(
+        separators=["\n\n","\n",". "," ",""],
+        chunk_size =500,
         chunk_overlap=0
         )
 
