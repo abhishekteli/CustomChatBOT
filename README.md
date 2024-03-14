@@ -1,18 +1,26 @@
-# Document Processing and Retrieval System
+# DocuMentor: Enhanced Information Retrieval System with RAG Data Pipeline
 
 ## Introduction and Business Requirement
-The objective of this system is to enhance information retrieval and processing capabilities across various document types. By leveraging advanced natural language processing (NLP) and machine learning algorithms, the system provides an efficient and effective way to index, search, and extract relevant information from a corpus of documents. This supports business intelligence, knowledge management, and data-driven decision-making, addressing the need for quick access to accurate and pertinent information from large and diverse document sets.
+DocuMentor aims to revolutionize the way businesses access and retrieve information from their vast repositories of documents. The integration of a Retrieval-Augmented Generation (RAG) data pipeline enhances the system's capabilities, offering nuanced, context-rich responses to user queries. This advanced feature supports comprehensive business intelligence, knowledge management, and accelerates data-driven decision-making processes.
 
-## System Architecture
+## Enhanced System Architecture with RAG Integration
+### Document Indexing and Embedding
+The system maintains its robust framework for indexing documents, where it employs OpenAIEmbeddings for vector representations and uses various loaders to support multiple document formats. The indexed data, facilitated by Chroma, ensures that documents are readily retrievable in a structured manner.
 
-### Initialization and Document Loading (main.py)
-The main.py script initializes the necessary components and loads documents into the system. It employs OpenAIEmbeddings for vector representation and RecursiveCharacterTextSplitter for breaking down documents into manageable chunks. The system supports various document types, including PDF, DOCX, CSV, JSON, HTML, TXT, and RTF, with appropriate loaders for each. Once a document is loaded, it is split using the text splitter and then indexed using the Chroma vector store, which embeds the text chunks and persists the embeddings for retrieval.
+### Retrieval-Augmented Generation Component
+The newly integrated RAG component refines the system's response mechanism. It retrieves relevant document snippets or embeddings based on user queries, enriching the context before generating responses. This process ensures that the system's outputs are both informative and contextually grounded.
 
-### Prompt Processing and Information Retrieval (prompt.py)
-prompt.py handles user queries and information retrieval using a conversational interface. It initializes a ChatOpenAI instance for natural language understanding and a Chroma instance for accessing the indexed embeddings. The RedundantFilterRetriever uses these embeddings to retrieve relevant document snippets based on the user's prompt. The RetrievalQA chain integrates these components to process user prompts, query the indexed data, and return relevant responses, enhancing the user's ability to obtain precise information quickly.
+### Augmented Generation Process
+Following retrieval, the augmented input—combining the query with the contextual data—is processed by advanced generative models to produce detailed and relevant answers. This mechanism ensures the delivery of high-quality information, leveraging the depth and breadth of the document corpus.
 
-### Redundancy Filtering (redundant_filter_retriever.py)
-The RedundantFilterRetriever class is designed to refine search results, minimizing redundant information. It leverages the embeddings to perform a max marginal relevance search, prioritizing diversity in the retrieved documents. This approach ensures that the information presented to the user is not only relevant but also varied, providing a comprehensive overview of the topic in question.
+### Detailed Integration Steps
+#### Query Processing Enhancement: The query interface in prompt.py now incorporates a sophisticated RAG workflow. Upon receiving a query, it initiates a retrieval process to gather pertinent context from the document index.
 
-## Execution Flow
-The system operates interactively, starting with document upload and indexing (main.py). Users can upload documents of supported types, which are then processed and stored in an indexed format. Following this, users can interact with the system via prompt.py to enter queries and receive relevant, concise, and diverse information excerpts in response. The system's loop continues until the user chooses to exit, allowing for continuous query processing and information retrieval.
+#### Contextual Information Fusion: The system combines the retrieved snippets with the original query, enriching the input provided to the generative model, thereby enabling more nuanced and detailed responses.
+
+#### Response Generation and Output: Leveraging the augmented input, the system uses generative models to formulate responses that encapsulate detailed insights derived from the document corpus, presenting users with enriched information.
+
+## Expected Benefits and Outcomes
+Contextualized Responses: The RAG pipeline ensures that every response is contextually enriched, providing users with precise and relevant information.
+Depth and Detail: The integration allows the system to generate responses that reflect a deeper understanding of the content, offering users comprehensive answers.
+Continuous Improvement: As the document corpus expands, the system progressively enhances its retrieval and response quality, adapting to the evolving informational landscape.
